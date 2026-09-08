@@ -21,6 +21,10 @@ RUN Invoke-WebRequest -Uri https://aka.ms/vs/17/release/vs_buildtools.exe -OutFi
     Remove-Item -Recurse -Force 'C:\\ProgramData\\Package Cache' -ErrorAction SilentlyContinue; \
     Remove-Item -Recurse -Force "$env:TEMP\\*" -ErrorAction SilentlyContinue
 
+# Register the DIA DLL so LLDB's PDB symbol file plugin can use it at runtime
+RUN regsvr32.exe /s 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\DIA SDK\\bin\\amd64\\msdia140.dll'; \
+    regsvr32.exe /s 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\DIA SDK\\bin\\msdia140.dll'
+
 # Git
 RUN Invoke-WebRequest -Uri https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.1/Git-2.47.1-64-bit.exe -OutFile git.exe; \
     Start-Process -FilePath .\\git.exe -Wait -ArgumentList \
